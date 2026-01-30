@@ -30,3 +30,5 @@ storage/
 # Docker
 **/.dockerignore
 
+# Avoid committing stray PDFs at repo root
+/*.pdf
