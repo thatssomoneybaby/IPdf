@@ -1,0 +1,32 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+.env
+.env.*
+
+# Editors/IDE
+.idea/
+.vscode/
+
+# Project storage outputs
+storage/
+
+# Streamlit
+.streamlit/
+
+# Docker
+**/.dockerignore
+

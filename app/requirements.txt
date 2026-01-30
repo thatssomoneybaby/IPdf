@@ -1,0 +1,11 @@
+fastapi==0.110.0
+uvicorn[standard]==0.27.1
+pydantic==2.7.4
+python-multipart==0.0.9
+python-dotenv==1.0.1
+# Docling (pins chosen to match versions confirmed to build locally)
+docling==2.56.1
+docling-core[chunking]==2.60.2
+docling-parse==4.6.0
+docling-ibm-models==3.9.1
+PyMuPDF==1.23.8

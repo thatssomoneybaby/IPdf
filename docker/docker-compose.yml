@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.8.4
+    container_name: ipdf-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  api:
+    build:
+      context: ../app
+    container_name: ipdf-api
+    restart: unless-stopped
+    environment:
+      - STORAGE_PATH=/data/storage
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+    volumes:
+      - ../storage:/data/storage
+    depends_on:
+      - qdrant
+    ports:
+      - "8000:8000"
+
+  ui:
+    build:
+      context: ../ui
+    container_name: ipdf-ui
+    restart: unless-stopped
+    environment:
+      - BACKEND_URL=http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+
+volumes:
+  qdrant_data: {}
+
