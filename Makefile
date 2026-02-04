@@ -18,4 +18,4 @@ build:
 	$(COMPOSE) build
 
 build-base:
-	$(COMPOSE) build docling-base api
+	$(COMPOSE) --profile build build docling-base api
