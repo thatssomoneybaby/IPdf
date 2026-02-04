@@ -1,6 +1,6 @@
 COMPOSE := docker compose -f docker/docker-compose.yml
 
-.PHONY: up down logs ps build
+.PHONY: up down logs ps build build-base
 
 up:
 	$(COMPOSE) up -d --build
@@ -17,3 +17,5 @@ ps:
 build:
 	$(COMPOSE) build
 
+build-base:
+	$(COMPOSE) build docling-base api

@@ -1,0 +1,7 @@
+# IPdf dependency constraints (lock transitive dependencies)
+#
+# Generate/update with:
+#   scripts/lock_deps.sh
+#
+# This file is intentionally checked in to keep Docker builds stable.
+# It will be populated by pip freeze in a clean, known-good environment.

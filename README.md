@@ -75,3 +75,15 @@ Troubleshooting
 
 - Slow Docker builds due to pip resolver backtracking: pins are set to avoid backtracking on aarch64. You can iterate by keeping Docker layer cache (remove `--no-cache-dir`), or use `--no-cache` for clean rebuilds.
 - Docling "pipeline not found": check `ingest_log.json` → update pins or the adapter path as needed.
+
+Docker build reliability (Docling base)
+
+- We build a local base image with Docling deps so API builds are fast and consistent.
+- Build steps (first time or after changing dependencies):
+  - `docker compose -f docker/docker-compose.yml build docling-base api`
+- For pip cache mounts, enable BuildKit:
+  - `DOCKER_BUILDKIT=1 docker compose -f docker/docker-compose.yml build docling-base api`
+- To lock transitive deps:
+  - `scripts/lock_deps.sh` (writes `app/constraints.txt`)
+- The `docling-base` service is marked with a compose profile (`build`) so it won't start during `up`.
+  - To build it explicitly: `docker compose -f docker/docker-compose.yml --profile build build docling-base`

@@ -1,0 +1,43 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+COPY app/requirements.txt /app/requirements.txt
+COPY app/constraints.txt /app/constraints.txt
+
+# OCR dependencies (Tesseract + EU language packs)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        tesseract-ocr \
+        tesseract-ocr-eng \
+        tesseract-ocr-deu \
+        tesseract-ocr-fra \
+        tesseract-ocr-spa \
+        tesseract-ocr-ita \
+        tesseract-ocr-por \
+        tesseract-ocr-nld \
+        tesseract-ocr-swe \
+        tesseract-ocr-dan \
+        tesseract-ocr-nor \
+        tesseract-ocr-fin \
+        tesseract-ocr-pol \
+    && rm -rf /var/lib/apt/lists/*
+
+# Use BuildKit cache for pip to speed up rebuilds.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir -r /app/requirements.txt -c /app/constraints.txt
+
+# Smoke test to catch Docling/fitz import issues during build.
+RUN python - <<'PY'
+import docling
+import docling_core
+import docling_parse
+import fitz
+print("docling:", getattr(docling, "__version__", "unknown"))
+print("docling_core:", getattr(docling_core, "__version__", "unknown"))
+print("docling_parse:", getattr(docling_parse, "__version__", "unknown"))
+print("fitz:", getattr(fitz, "__doc__", "")[:20])
+PY

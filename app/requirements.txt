@@ -9,3 +9,6 @@ docling-core[chunking]==2.60.2
 docling-parse==4.6.0
 docling-ibm-models==3.9.1
 PyMuPDF==1.23.8
+qdrant-client==1.8.2
+sentence-transformers==2.7.0
+langdetect==1.0.9
