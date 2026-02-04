@@ -89,6 +89,13 @@ def run_docling_or_fallback(src_path: Path, out_dir: Path, options: Optional[dic
     dl = try_import_docling()
     if dl is not None:
         versions: dict[str, Optional[str]] = {"docling": getattr(dl, "__version__", None)}
+        if not versions.get("docling"):
+            try:
+                import importlib.metadata
+
+                versions["docling"] = importlib.metadata.version("docling")
+            except Exception:
+                pass
         try:
             import docling_core as dlc  # type: ignore
 

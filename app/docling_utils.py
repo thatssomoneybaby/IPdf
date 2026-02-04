@@ -106,20 +106,24 @@ def try_docling_to_canonical(dl, src_path: Path, converter=None):
     page_count = None
     adapter_used: Optional[str] = None
 
+    last_error: Optional[Exception] = None
+
     try:
         if converter is not None and hasattr(converter, "convert"):
             ddoc = converter.convert(str(src_path))  # type: ignore[attr-defined]
             adapter_used = "DocumentConverter.convert+ocr"
         else:
             ddoc = None
-    except Exception:
+    except Exception as e:
+        last_error = e
         ddoc = None
 
     try:
         if ddoc is None and hasattr(dl, "convert_pdf"):
             ddoc = dl.convert_pdf(str(src_path))  # type: ignore[attr-defined]
             adapter_used = "convert_pdf"
-    except Exception:
+    except Exception as e:
+        last_error = e
         ddoc = None
 
     if ddoc is None:
@@ -150,18 +154,22 @@ def try_docling_to_canonical(dl, src_path: Path, converter=None):
                     adapter_used = "DocumentConverter.process"
                 else:
                     ddoc = None
-        except Exception:
+        except Exception as e:
+            last_error = e
             ddoc = None
 
     if ddoc is None:
         try:
             pipeline_cls = getattr(dl, "SimplePipeline", None) or getattr(dl, "Pipeline", None)
             if pipeline_cls is None:
+                if last_error:
+                    raise RuntimeError(f"Docling pipeline not found (last error: {last_error})")
                 raise RuntimeError("Docling pipeline not found")
             pipeline = pipeline_cls()
             ddoc = pipeline.run(str(src_path))  # type: ignore
             adapter_used = f"{getattr(pipeline_cls, '__name__', 'Pipeline')}.run"
         except Exception as e:
+            last_error = e
             raise RuntimeError(f"Docling parse failed: {e}")
 
     def _cell_text(cell) -> str:
@@ -271,5 +279,8 @@ def try_docling_to_canonical(dl, src_path: Path, converter=None):
             raise RuntimeError("Docling document lacks pages/blocks attributes")
     except Exception as e:
         raise RuntimeError(f"Docling canonicalization failed: {e}")
+
+    if not pages and not blocks and last_error:
+        raise RuntimeError(f"Docling parse failed: {last_error}")
 
     return pages, blocks, page_count, adapter_used
