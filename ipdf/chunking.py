@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import uuid
 import re
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -146,7 +147,8 @@ def _chunk_type(section_path: list[str], clause_ref: Optional[str], is_table: bo
 
 def _stable_chunk_id(doc_id: str, source_blocks: list[str], text: str) -> str:
     base = "|".join([doc_id] + (source_blocks or []) + [text])
-    return hashlib.sha256(base.encode("utf-8")).hexdigest()
+    # Qdrant point IDs must be UUIDs or integers; use uuid5 for stability.
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, base))
 
 
 def chunk_document(

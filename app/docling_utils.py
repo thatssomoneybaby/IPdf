@@ -130,7 +130,12 @@ def try_docling_to_canonical(dl, src_path: Path, converter=None):
 
                 converter_cls = _DC
             except Exception:
-                converter_cls = getattr(dl, "DocumentConverter", None)
+                try:
+                    from docling_core.document_converter import DocumentConverter as _DCC  # type: ignore
+
+                    converter_cls = _DCC
+                except Exception:
+                    converter_cls = getattr(dl, "DocumentConverter", None)
 
             if converter_cls is not None:
                 converter = converter_cls()  # type: ignore

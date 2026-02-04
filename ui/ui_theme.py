@@ -9,6 +9,7 @@ def apply_base_theme():
 
         html, body, [class*="css"] {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #e5e7eb;
         }
 
         .app-title {
@@ -16,10 +17,11 @@ def apply_base_theme():
             font-weight: 700;
             letter-spacing: -0.02em;
             margin-bottom: 0.2rem;
+            color: #f9fafb;
         }
 
         .subtitle {
-            color: #6b7280;
+            color: #cbd5f5;
             font-size: 1rem;
         }
 
@@ -30,11 +32,11 @@ def apply_base_theme():
         }
 
         .soft-card {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.25);
             border-radius: 14px;
             padding: 1rem 1.2rem;
-            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 12px 30px rgba(2, 6, 23, 0.45);
         }
 
         .pill {
@@ -46,35 +48,45 @@ def apply_base_theme():
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
-        .pill-ready { background: #ecfdf3; color: #047857; border: 1px solid #a7f3d0; }
-        .pill-running { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-        .pill-queued { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
-        .pill-failed { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
-        .pill-muted { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+        .pill-ready { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.5); }
+        .pill-running { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(147, 197, 253, 0.5); }
+        .pill-queued { background: rgba(249, 115, 22, 0.2); color: #fdba74; border: 1px solid rgba(253, 186, 116, 0.5); }
+        .pill-failed { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.5); }
+        .pill-muted { background: rgba(148, 163, 184, 0.2); color: #cbd5f5; border: 1px solid rgba(148, 163, 184, 0.45); }
 
         .stApp {
-            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            background: radial-gradient(circle at top, #0f172a 0%, #0b1220 45%, #070b12 100%);
         }
 
         .stButton > button {
             border-radius: 10px;
-            border: 1px solid #0f766e;
-            background: #0f766e;
-            color: #ffffff;
+            border: 1px solid #38bdf8;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #f8fafc;
             font-weight: 600;
             padding: 0.35rem 0.9rem;
         }
         .stButton > button:hover {
-            background: #115e59;
-            border-color: #115e59;
+            background: linear-gradient(135deg, #38bdf8, #3b82f6);
+            border-color: #7dd3fc;
         }
 
         .stTextInput input, .stTextArea textarea {
             border-radius: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.35);
         }
 
         .stSelectbox div[data-baseweb="select"] {
             border-radius: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+        }
+
+        .stMarkdown, .stCaption, .stText, .stAlert {
+            color: #e2e8f0;
         }
 
         </style>

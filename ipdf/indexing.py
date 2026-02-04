@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 from typing import Any, Iterable
 
+import uuid
+
 from qdrant_client.models import FieldCondition, Filter, MatchValue, PointStruct
 
 from .embeddings import embed_texts
@@ -43,6 +45,14 @@ def index_chunks(
 
     points = []
     for idx, ch in enumerate(chunks):
+        chunk_id = ch.get("chunk_id")
+        try:
+            uuid.UUID(str(chunk_id))
+        except Exception:
+            # Ensure Qdrant-compatible UUIDs even for legacy chunks.
+            base = "|".join([str(doc_id)] + (ch.get("source_blocks") or []) + [ch.get("text", "") or ""])
+            chunk_id = str(uuid.uuid5(uuid.NAMESPACE_URL, base))
+            ch["chunk_id"] = chunk_id
         if semantic_labels:
             ch["semantic_type"] = semantic_labels[idx]["semantic_type"]
             ch["semantic_confidence"] = semantic_labels[idx]["semantic_confidence"]
@@ -60,7 +70,7 @@ def index_chunks(
             "semantic_type": ch.get("semantic_type"),
             "semantic_confidence": ch.get("semantic_confidence"),
         }
-        points.append(PointStruct(id=ch.get("chunk_id"), vector=embeddings[idx], payload=payload))
+        points.append(PointStruct(id=chunk_id, vector=embeddings[idx], payload=payload))
 
     client.upsert(collection_name=COLLECTION_NAME, points=points)
     return len(points), chunked
